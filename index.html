@@ -1,0 +1,434 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>PontoView • Dicas de Saúde</title>
+
+  <!-- Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+
+  <!-- Material Icons Outlined -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet" />
+
+  <!-- Base (na pasta /css) -->
+  <link rel="stylesheet" href="css/pv-base.css">
+
+  <!-- CSS mínimo só do painel (mensagem + progress + offline overlay) -->
+  <style>
+    .pvCard{ position:relative; display:flex; flex-direction:column; min-height:0; }
+    .pvCardBody{
+      flex:1 1 auto;
+      min-height:0;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding: calc(var(--pad) * 1.15);
+      overflow:hidden;
+    }
+
+    .pvMsgBox{ width:min(1200px, 92%); text-align:center; }
+
+    .pvMsgPrimary{
+      margin:0;
+      font-weight: 900;
+      color: var(--ink);
+      font-size: clamp(30px, 4.2vw, 60px);
+      line-height: 1.08;
+      letter-spacing: -0.02em;
+      opacity: 1;
+      transform: translateY(0);
+      filter: blur(0px);
+      transition: opacity 520ms ease, transform 520ms ease, filter 520ms ease;
+    }
+
+    /* Fade/slide suave na troca */
+    .pvFadeOut .pvMsgPrimary{
+      opacity: 0;
+      transform: translateY(6px);
+      filter: blur(1px);
+    }
+
+    .pvProgressWrap{
+      width:min(900px, 72%);
+      margin: 18px auto 0;
+      padding: 8px 10px;
+      border-radius:999px;
+      background: #f6f8fc;
+      border:1px solid rgba(15,23,42,.08);
+    }
+    .pvProgress{
+      height: 8px;
+      border-radius:999px;
+      background: rgba(15,23,42,.10);
+      overflow:hidden;
+    }
+    .pvBar{
+      height:100%;
+      width:0%;
+      border-radius:999px;
+      background:#2c6aa3;
+    }
+
+    /* ===== OFFLINE OVERLAY (fallback dentro do mesmo card) ===== */
+    .pvOffline{
+      position:absolute;
+      inset:0;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding: var(--pad);
+      background: rgba(255,255,255,.92);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      z-index: 5;
+    }
+    .pvOfflineCard{
+      width: min(980px, 92%);
+      border-radius: 18px;
+      border:1px solid var(--line);
+      background:#fff;
+      box-shadow: 0 14px 40px rgba(0,0,0,.10);
+      padding: clamp(18px, 2.2vw, 30px);
+      display:flex;
+      gap: 18px;
+      align-items:flex-start;
+    }
+    .pvOfflineIcon{
+      width: 54px; height: 54px;
+      border-radius: 16px;
+      background: rgba(239,68,68,.10);
+      border:1px solid rgba(239,68,68,.25);
+      display:grid;
+      place-items:center;
+      flex:0 0 auto;
+    }
+    .pvOfflineIcon .material-icons-outlined{
+      font-size: 28px;
+      color:#ef4444;
+      opacity:.95;
+    }
+    .pvOfflineTitle{
+      margin:0;
+      font-weight: 900;
+      letter-spacing:.08em;
+      text-transform: uppercase;
+      font-size: clamp(16px, 1.6vw, 22px);
+      color:#0f172a;
+    }
+    .pvOfflineText{
+      margin:10px 0 0;
+      color:#334155;
+      font-weight:700;
+      font-size: clamp(14px, 1.5vw, 18px);
+      line-height:1.35;
+      opacity:.9;
+    }
+    .pvOfflineHint{
+      margin:10px 0 0;
+      color:#475569;
+      font-weight:800;
+      font-size: clamp(12px, 1.2vw, 14px);
+      letter-spacing:.08em;
+      text-transform: uppercase;
+      opacity:.75;
+    }
+
+    /* Status pill (online/offline) – usa sua pill padrão, só controla o “dot” */
+    #netDot{ background:#22c55e; }         /* verde */
+    #netDot.off{ background:#ef4444; }     /* vermelho */
+
+    @media (prefers-reduced-motion: reduce){
+      .pvMsgPrimary{ transition:none; }
+      .pvBar{ transition:none !important; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="pvPage">
+    <div class="pvShell" role="application" aria-label="Painel PontoView Dicas de Saúde">
+
+      <!-- Header padrão -->
+      <header class="pvHeader">
+        <div class="pvHeaderLeft">
+          <div class="pvIconBadge" aria-hidden="true">
+            <span class="material-icons-outlined">health_and_safety</span>
+          </div>
+          <div class="pvTitles">
+            <h1 class="pvTitle">DICAS DE SAÚDE</h1>
+            <!-- sem subtítulo, como você pediu -->
+          </div>
+        </div>
+
+        <div class="pvHeaderRight" aria-label="Horário">
+          <div class="pvClock" id="clock">--:--</div>
+        </div>
+      </header>
+
+      <!-- Subbar padrão (sem “FONTE • …”) -->
+      <div class="pvSubbar">
+        <div class="pvSubLeft">HOJE • DICAS RÁPIDAS</div>
+        <div class="pvSubRight">
+          <span class="pvPill" title="Status de conexão">
+            <span class="pvDot" id="netDot" aria-hidden="true"></span>
+            <span id="netText">ONLINE</span>
+          </span>
+        </div>
+      </div>
+
+      <!-- Content padrão -->
+      <main class="pvContent">
+        <section class="pvCard" aria-label="Cartão de dicas" id="card">
+          <div class="pvCardBody" id="stage">
+            <div class="pvMsgBox">
+              <p class="pvMsgPrimary" id="msgPrimary">Hidrate-se ao longo do dia.</p>
+
+              <div class="pvProgressWrap" aria-hidden="true">
+                <div class="pvProgress"><div class="pvBar" id="bar"></div></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- FALLBACK OFFLINE (fica dentro do mesmo pvCard) -->
+          <div class="pvOffline" id="offlineLayer" aria-hidden="true">
+            <div class="pvOfflineCard" role="status" aria-label="Modo offline">
+              <div class="pvOfflineIcon" aria-hidden="true">
+                <span class="material-icons-outlined">wifi_off</span>
+              </div>
+              <div>
+                <p class="pvOfflineTitle">MODO OFFLINE</p>
+                <p class="pvOfflineText">
+                  Sem conexão com a internet no momento. As dicas continuam sendo exibidas normalmente e o painel se atualiza automaticamente quando a conexão voltar.
+                </p>
+                <p class="pvOfflineHint">verificando conexão…</p>
+              </div>
+            </div>
+          </div>
+
+        </section>
+      </main>
+
+      <!-- Footer padrão: só logo à direita (sem “atualizado…”) -->
+      <footer class="pvFooter" aria-label="Rodapé">
+        <div class="pvFooterLeft"></div>
+        <div class="pvFooterRight">
+          <img class="pvLogo" src="assets/logo-pontoview.png" alt="PontoView" onerror="this.style.display='none'">
+        </div>
+      </footer>
+
+    </div>
+  </div>
+
+  <script>
+    /***********************
+     * CONFIG
+     ***********************/
+    const ROTATE_EVERY_MS = 12000;   // 10–15s recomendado
+    const TRANSITION_MS = 520;       // manter alinhado ao CSS
+
+    // (Opcional) Se você criar um Worker/endpoint JSON gratuito no futuro,
+    // coloque a URL aqui. Exemplo esperado:
+    // { "tips": ["dica 1", "dica 2", ...] }
+    // Deixe null para funcionar 100% local/offline.
+    const REMOTE_TIPS_URL = null; // ex: "https://seu-worker.seudominio.workers.dev/tips"
+
+    // Dicas curtas (sem link, 1 frase) — quantidade considerável
+    const DICAS = [
+      "Hidrate-se ao longo do dia.",
+      "Lave as mãos com água e sabão sempre que possível.",
+      "Use álcool em gel quando não houver pia por perto.",
+      "Evite tocar olhos, nariz e boca com as mãos.",
+      "Cubra nariz e boca ao tossir ou espirrar.",
+      "Prefira lenço descartável ou o antebraço ao espirrar.",
+      "Mantenha o celular com volume baixo em ambientes compartilhados.",
+      "Respeite o espaço e o conforto de outras pessoas.",
+      "Se estiver com sintomas, informe um responsável.",
+      "Durma bem: sono é parte importante da saúde.",
+      "Faça pequenas pausas para alongar o corpo.",
+      "Mantenha uma postura confortável ao sentar.",
+      "Evite ficar longos períodos na mesma posição.",
+      "Alimente-se com calma e atenção.",
+      "Inclua frutas e verduras sempre que possível.",
+      "Dê preferência a alimentos menos ultraprocessados.",
+      "Modere o consumo de açúcar e bebidas adoçadas.",
+      "Reduza o excesso de sal quando possível.",
+      "Se puder, faça uma caminhada leve diariamente.",
+      "Movimento diário ajuda no bem-estar.",
+      "Respire fundo algumas vezes para reduzir a tensão.",
+      "Proteja-se do sol em dias quentes.",
+      "Use protetor solar quando houver exposição ao sol.",
+      "Beba água antes de sentir sede.",
+      "Evite fumar em qualquer ambiente interno.",
+      "Não compartilhe objetos pessoais, como copos e talheres.",
+      "Mantenha seus pertences sob cuidado.",
+      "Siga a sinalização e as orientações do local.",
+      "Em caso de dúvida, procure a equipe responsável.",
+      "Pequenas atitudes constroem um ambiente melhor.",
+      "Se estiver com tontura, sente-se e avise alguém.",
+      "Se estiver febril, procure orientação adequada.",
+      "Evite automedicação; busque orientação profissional.",
+      "Atenção ao uso correto de medicamentos prescritos.",
+      "Mantenha consultas e exames em dia quando indicado.",
+      "Pratique higiene bucal diariamente.",
+      "Evite bebidas alcoólicas em excesso.",
+      "Mantenha uma rotina de refeições equilibrada.",
+      "Faça pausas de tela e descanse os olhos.",
+      "Lembre-se: prevenção é cuidado contínuo."
+    ];
+
+    /***********************
+     * ELEMENTOS
+     ***********************/
+    const stage = document.getElementById("stage");
+    const msgPrimary = document.getElementById("msgPrimary");
+    const bar = document.getElementById("bar");
+    const clockEl = document.getElementById("clock");
+
+    const netDot = document.getElementById("netDot");
+    const netText = document.getElementById("netText");
+    const offlineLayer = document.getElementById("offlineLayer");
+
+    /***********************
+     * UTIL
+     ***********************/
+    const pad2 = (n) => String(n).padStart(2, "0");
+
+    function formatClock(d){
+      return `${pad2(d.getHours())}:${pad2(d.getMinutes())}`;
+    }
+
+    function shuffle(arr){
+      const a = arr.slice();
+      for(let i=a.length-1;i>0;i--){
+        const j = Math.floor(Math.random()*(i+1));
+        [a[i],a[j]] = [a[j],a[i]];
+      }
+      return a;
+    }
+
+    /***********************
+     * CLOCK
+     ***********************/
+    function tick(){
+      const d = new Date();
+      clockEl.textContent = formatClock(d);
+    }
+    tick();
+    setInterval(tick, 1000);
+
+    /***********************
+     * DATA (local + opcional remoto)
+     ***********************/
+    let tips = DICAS.slice();
+
+    async function tryLoadRemoteTips(){
+      if(!REMOTE_TIPS_URL) return;
+      try{
+        const res = await fetch(REMOTE_TIPS_URL, { cache: "no-store" });
+        if(!res.ok) throw new Error("HTTP " + res.status);
+        const data = await res.json();
+        if(data && Array.isArray(data.tips) && data.tips.length){
+          // sanitiza: string, curta, sem quebra gigante
+          const cleaned = data.tips
+            .filter(x => typeof x === "string")
+            .map(x => x.trim())
+            .filter(x => x.length >= 8 && x.length <= 120);
+          if(cleaned.length){
+            tips = cleaned;
+          }
+        }
+      }catch(e){
+        // Silencioso: continua com o local.
+      }
+    }
+
+    /***********************
+     * ROTATION
+     ***********************/
+    let pool = shuffle(tips);
+    let idx = 0;
+    let lastText = null;
+
+    function resetPool(){
+      pool = shuffle(tips);
+      idx = 0;
+    }
+
+    function nextTip(){
+      if(idx >= pool.length) resetPool();
+      let t = pool[idx++];
+      if(t === lastText && pool.length > 1){
+        if(idx >= pool.length) resetPool();
+        t = pool[idx++];
+      }
+      lastText = t;
+      return t;
+    }
+
+    function startProgress(){
+      bar.style.transition = "none";
+      bar.style.width = "0%";
+      bar.offsetHeight;
+      bar.style.transition = `width ${ROTATE_EVERY_MS}ms linear`;
+      bar.style.width = "100%";
+    }
+
+    function setTip(text){
+      stage.classList.add("pvFadeOut");
+      setTimeout(() => {
+        msgPrimary.textContent = text;
+        stage.classList.remove("pvFadeOut");
+      }, TRANSITION_MS);
+    }
+
+    function rotateOnce(){
+      setTip(nextTip());
+      startProgress();
+    }
+
+    /***********************
+     * OFFLINE UI
+     ***********************/
+    function setOnlineUI(isOnline){
+      netText.textContent = isOnline ? "ONLINE" : "OFFLINE";
+      if(isOnline){
+        netDot.classList.remove("off");
+      }else{
+        netDot.classList.add("off");
+      }
+      offlineLayer.style.display = isOnline ? "none" : "flex";
+      offlineLayer.setAttribute("aria-hidden", isOnline ? "true" : "false");
+    }
+
+    /***********************
+     * START
+     ***********************/
+    (async () => {
+      setOnlineUI(navigator.onLine);
+
+      // tenta enriquecer com remoto (se configurado), mas nunca bloqueia
+      await tryLoadRemoteTips();
+      resetPool();
+
+      // primeira dica
+      setTip(nextTip());
+      startProgress();
+      setInterval(rotateOnce, ROTATE_EVERY_MS);
+
+      // eventos online/offline
+      window.addEventListener("online", async () => {
+        setOnlineUI(true);
+        await tryLoadRemoteTips();
+        resetPool();
+      });
+      window.addEventListener("offline", () => setOnlineUI(false));
+
+      // sanidade (algumas TVs não disparam eventos corretamente)
+      setInterval(() => setOnlineUI(navigator.onLine), 5000);
+    })();
+  </script>
+</body>
+</html>
