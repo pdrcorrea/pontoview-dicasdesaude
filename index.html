@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>PontoView • Dicas de Saúde</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -55,10 +55,8 @@
     }
 
     .pvShell{
-      width:100vw;
-      height:100vh;
-      display:flex;
-      flex-direction:column;
+      width:100vw; height:100vh;
+      display:flex; flex-direction:column;
       min-height:0;
       background:#fff;
     }
@@ -91,8 +89,7 @@
 
     .pvHeaderLeft, .pvHeaderRight{position:relative; z-index:1;}
     .pvHeaderLeft{
-      display:flex;
-      align-items:center;
+      display:flex; align-items:center;
       gap: clamp(12px, 1.5vw, 18px);
       min-width:0;
       flex:1 1 auto;
@@ -106,8 +103,7 @@
       border: 1px solid rgba(255,255,255,.24);
       box-shadow: inset 0 1px 0 rgba(255,255,255,.20), 0 14px 28px rgba(0,0,0,.14);
       backdrop-filter: blur(10px);
-      display:grid;
-      place-items:center;
+      display:grid; place-items:center;
       flex:0 0 auto;
       color:#fff;
     }
@@ -115,8 +111,8 @@
       font-size: 34px;
       line-height: 1;
       color:#fff;
-      font-variation-settings:'FILL' 0,'wght' 650,'GRAD' 0,'opsz' 24;
       opacity:.98;
+      font-variation-settings:'FILL' 0,'wght' 650,'GRAD' 0,'opsz' 24;
     }
 
     .pvTitles{display:flex; flex-direction:column; gap:6px; min-width:0;}
@@ -130,27 +126,8 @@
       line-height:1.02;
     }
 
-    .pvHeaderRight{
-      display:flex;
-      align-items:center;
-      justify-content:flex-end;
-      min-width:max-content;
-    }
-    .pvPill{
-      user-select:none;
-      font-size: clamp(12px, 1.1vw, 16px);
-      font-weight: 900;
-      letter-spacing:.10em;
-      text-transform: uppercase;
-      color:#fff;
-      padding: clamp(10px, 1.1vw, 14px) clamp(14px, 1.5vw, 22px);
-      border-radius: 999px;
-      background: rgba(255,255,255,.16);
-      border: 1px solid rgba(255,255,255,.22);
-      box-shadow: inset 0 1px 0 rgba(255,255,255,.18), 0 12px 26px rgba(0,0,0,.14);
-      backdrop-filter: blur(10px);
-      white-space:nowrap;
-    }
+    /* header right vazio */
+    .pvHeaderRight{min-width: clamp(8px, 8vw, 140px);}
 
     /* ================= MAIN ================= */
     .pvMain{
@@ -170,13 +147,11 @@
       padding: clamp(12px, 1.4vw, 18px);
       overflow:hidden;
       box-shadow: inset 0 1px 0 rgba(255,255,255,.45);
-      display:grid;
-      grid-template-columns: 1fr;
-      gap: var(--gap);
-      align-items:stretch;
+      display:flex;
     }
 
     .card{
+      width:100%;
       border-radius: var(--radius);
       overflow:hidden;
       display:flex;
@@ -197,7 +172,6 @@
       gap: 12px;
       flex:0 0 auto;
       min-width:0;
-      background: transparent;
     }
     .cardHeader .label{
       font-size: 12px;
@@ -218,18 +192,25 @@
     }
     .tdot.active{background:#2d76b9; width:22px;}
 
-    .cardBody{
+    /* Layout: texto grande + rodapé compacto */
+    .content{
       flex:1 1 auto;
       min-height:0;
       padding: clamp(18px, 2.2vw, 30px);
       display:grid;
-      grid-template-columns: 1.1fr .9fr;
-      gap: var(--gap);
-      align-items:center;
+      grid-template-rows: 1fr auto; /* manchete manda */
+      gap: clamp(12px, 1.6vw, 18px);
       overflow:hidden;
     }
 
-    .tipText{min-width:0}
+    .tipArea{
+      min-height:0;
+      display:flex;
+      flex-direction:column;
+      gap: 12px;
+      overflow:hidden;
+    }
+
     .tipKicker{
       display:inline-flex;
       align-items:center;
@@ -249,6 +230,7 @@
       letter-spacing:.10em;
       text-transform: uppercase;
       color:#23344a;
+      flex:0 0 auto;
     }
     .tipKicker .material-symbols-outlined{
       font-size: 18px;
@@ -256,73 +238,147 @@
       font-variation-settings:'FILL' 0,'wght' 650,'GRAD' 0,'opsz' 24;
     }
 
+    /* Manchete: auto-fit via JS */
     .tipTitle{
-      margin: 16px 0 0;
+      margin:0;
       font-weight: 900;
       letter-spacing: -0.02em;
-      line-height: 1.08;
+      line-height: 1.10;
       color: var(--ink);
-      font-size: clamp(28px, 4.0vw, 58px);
-
-      /* limita p/ não explodir */
-      display:-webkit-box;
-      -webkit-box-orient:vertical;
-      -webkit-line-clamp:3;
-      overflow:hidden;
+      text-wrap: balance;
+      overflow: visible;
+      flex:0 0 auto;
     }
 
     .tipBody{
-      margin: 12px 0 0;
+      margin:0;
       font-weight: 800;
       color: rgba(11,19,32,.58);
-      font-size: clamp(14px, 1.55vw, 22px);
       line-height: 1.45;
-      max-width: 64ch;
-
-      display:-webkit-box;
-      -webkit-box-orient:vertical;
-      -webkit-line-clamp:4;
+      max-width: 74ch;
+      text-wrap: pretty;
       overflow:hidden;
+      display:none;
+      flex:0 0 auto;
     }
 
-    /* Bloco visual: ilustração SVG leve (sem depender de internet) */
-    .tipArt{
+    /* ====== bottom: imagem + qr lado a lado ====== */
+    .bottomRow{
+      display:grid;
+      grid-template-columns: 1fr auto; /* imagem cresce, QR fixo */
+      gap: 12px;
+      align-items:stretch;
+      min-height:0;
+    }
+
+    /* Imagem (aparece somente se tiver url válida) */
+    .miniMedia{
+      display:none;
+      height: clamp(104px, 16vh, 150px);
+      border-radius: 18px;
+      overflow:hidden;
+      background: linear-gradient(180deg, rgba(44,106,163,.24), rgba(15,61,99,.18));
+      border: 1px solid rgba(210,222,238,.95);
+      box-shadow: 0 12px 28px rgba(2,10,23,.10);
       position:relative;
-      border-radius: var(--radius);
-      overflow:hidden;
-      min-height: clamp(220px, 40vh, 620px);
-      background: linear-gradient(180deg, var(--topB), var(--topA));
-      box-shadow: 0 18px 60px rgba(2,10,23,.14);
+      min-width:0;
     }
-    .tipArt::after{
+    .miniMedia img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+      opacity: .98;
+      transform: scale(1.02);
+    }
+    .miniMedia::after{
       content:"";
       position:absolute;
       inset:0;
-      background: linear-gradient(180deg, rgba(0,0,0,.06), rgba(0,0,0,.22));
+      background: linear-gradient(180deg, rgba(0,0,0,.06), rgba(0,0,0,.18));
       pointer-events:none;
     }
-    .tipArtInner{
-      position:absolute;
-      inset:0;
-      display:grid;
-      place-items:center;
-      opacity:.95;
-      transform: translateY(0);
-      transition: opacity var(--anim) var(--ease), transform var(--anim) var(--ease), filter var(--anim) var(--ease);
-      filter: blur(0px);
-    }
 
-    /* troca suave */
+    /* QR pequeno */
+    .qrBox{
+      display:flex;
+      align-items:center;
+      justify-content:flex-start;
+      gap: 12px;
+      padding: 12px 12px;
+      border-radius: 18px;
+      background: rgba(255,255,255,.66);
+      border: 1px solid rgba(210,222,238,.95);
+      box-shadow: 0 14px 34px rgba(2,10,23,.10);
+      overflow:hidden;
+      min-width: 270px;
+    }
+    .qrImg{
+      width: 88px;
+      height: 88px;
+      border-radius: 16px;
+      background:#fff;
+      border:1px solid rgba(210,222,238,.95);
+      box-shadow: 0 10px 24px rgba(2,10,23,.08);
+      display:block;
+      flex:0 0 auto;
+    }
+    .qrText{
+      min-width:0;
+      display:flex;
+      flex-direction:column;
+      gap: 6px;
+    }
+    .qrTitle{
+      margin:0;
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing:.12em;
+      text-transform: uppercase;
+      color:#23344a;
+      opacity:.90;
+      line-height:1.1;
+    }
+    .qrHost{
+      margin:0;
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing:.10em;
+      text-transform: uppercase;
+      color:#3b4b62;
+      opacity:.78;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      max-width: 26ch;
+      line-height:1.1;
+    }
+    .qrHint{
+      margin:0;
+      font-size: 12px;
+      font-weight: 800;
+      color:#5a6b82;
+      line-height:1.35;
+      opacity:.85;
+      display:-webkit-box;
+      -webkit-box-orient:vertical;
+      -webkit-line-clamp:2;
+      overflow:hidden;
+      max-width: 38ch;
+    }
+    .qrBox.is-hidden{display:none}
+
+    /* Troca suave */
+    .pvFadeOut .tipKicker,
     .pvFadeOut .tipTitle,
     .pvFadeOut .tipBody,
-    .pvFadeOut .tipKicker,
-    .pvFadeOut .tipArtInner{
+    .pvFadeOut .bottomRow{
       opacity:0;
       transform: translateY(8px);
       filter: blur(1px);
     }
-    .tipTitle, .tipBody, .tipKicker, .tipArtInner{
-      transition: opacity var(--anim) var(--ease), transform var(--anim) var(--ease), filter var(--anim) var(--ease);
+    .tipKicker,.tipTitle,.tipBody,.bottomRow{
+      transition: opacity var(--anim) ease, transform var(--anim) ease, filter var(--anim) ease;
     }
 
     /* progress acima do rodapé */
@@ -349,7 +405,7 @@
       transform-origin:left center;
     }
 
-    /* footer com logo canto inferior direito */
+    /* footer */
     .pvFooter{
       flex:0 0 auto;
       height: var(--footerH);
@@ -358,7 +414,6 @@
       justify-content:flex-end;
       padding: 10px var(--pad);
       background:#fff;
-      gap: 12px;
       min-width:0;
     }
     .pvLogo{
@@ -405,8 +460,8 @@
     }
     .pvOfflineIcon .material-symbols-outlined{
       font-size: 28px;
-      font-variation-settings:'FILL' 0,'wght' 650,'GRAD' 0,'opsz' 24;
       opacity:.95;
+      font-variation-settings:'FILL' 0,'wght' 650,'GRAD' 0,'opsz' 24;
     }
     .pvOfflineTitle{
       margin:0;
@@ -435,17 +490,17 @@
     }
 
     @media (orientation: portrait){
-      .cardBody{
-        grid-template-columns: 1fr;
-        grid-template-rows: auto 1fr;
-        align-items:stretch;
-      }
-      .tipArt{ min-height: clamp(220px, 36vh, 520px); }
-      .tipTitle{ font-size: clamp(26px, 6.0vw, 54px); }
+      .miniMedia{ height: clamp(96px, 14vh, 150px); }
+      .qrHint{ -webkit-line-clamp: 3; }
+      .qrBox{ min-width: 250px; }
+    }
+
+    @media (max-height: 620px){
+      .bottomRow{ display:none; }
     }
 
     @media (prefers-reduced-motion: reduce){
-      .tipTitle,.tipBody,.tipKicker,.tipArtInner{ transition:none; }
+      .tipKicker,.tipTitle,.tipBody,.bottomRow{ transition:none; }
       #cycleFill{ transition:none !important; }
     }
   </style>
@@ -462,40 +517,48 @@
           <h1 class="pvTitle" id="titleHdr"></h1>
         </div>
       </div>
-
-      <!-- opcional: “fonte” do conteúdo (sem online/offline) -->
-      <div class="pvHeaderRight">
-        <div class="pvPill" id="sourcePill">CONTEÚDO LOCAL</div>
-      </div>
+      <div class="pvHeaderRight" aria-hidden="true"></div>
     </header>
 
     <main class="pvMain">
       <div class="panel">
         <section class="card" id="card">
           <div class="cardHeader">
-            <div class="label" id="kickerSmall">BEM-ESTAR • PREVENÇÃO</div>
+            <div class="label" id="kickerSmall">BEM-ESTAR • SERVIÇO</div>
             <div class="toggleDots" aria-hidden="true">
               <div class="tdot active" id="dotA"></div>
               <div class="tdot" id="dotB"></div>
             </div>
           </div>
 
-          <div class="cardBody" id="stage">
-            <div class="tipText">
+          <div class="content" id="stage">
+            <div class="tipArea" id="tipArea">
               <div class="tipKicker" id="tipKicker">
-                <span class="material-symbols-outlined" id="tipIcon">water_drop</span>
-                <span id="tipCat">HIDRATAÇÃO</span>
+                <span class="material-symbols-outlined" id="tipIcon">info</span>
+                <span id="tipCat">SAÚDE</span>
               </div>
-              <h2 class="tipTitle" id="tipTitle">Hidrate-se ao longo do dia.</h2>
-              <p class="tipBody" id="tipBody">Tome pequenos goles com frequência. Água ajuda na disposição, na circulação e no controle da temperatura corporal.</p>
+
+              <h2 class="tipTitle" id="tipTitle">Carregando…</h2>
+              <p class="tipBody" id="tipBody"></p>
             </div>
 
-            <div class="tipArt" aria-hidden="true">
-              <div class="tipArtInner" id="tipArtInner"></div>
+            <!-- Imagem + QR lado a lado (sem roubar o espaço da manchete) -->
+            <div class="bottomRow">
+              <div class="miniMedia" id="miniMedia" aria-label="Imagem ilustrativa">
+                <img id="miniImg" alt="">
+              </div>
+
+              <div class="qrBox is-hidden" id="qrBox" aria-label="QR Code para ler mais">
+                <img class="qrImg" id="qrImg" alt="QR Code">
+                <div class="qrText">
+                  <p class="qrTitle">LEIA MAIS</p>
+                  <p class="qrHost" id="qrHost">—</p>
+                  <p class="qrHint" id="qrHint"></p>
+                </div>
+              </div>
             </div>
           </div>
 
-          <!-- OFFLINE OVERLAY (sem badge) -->
           <div class="pvOffline" id="offlineLayer" aria-hidden="true">
             <div class="pvOfflineCard" role="status" aria-label="Modo offline">
               <div class="pvOfflineIcon" aria-hidden="true">
@@ -504,23 +567,20 @@
               <div>
                 <p class="pvOfflineTitle">MODO OFFLINE</p>
                 <p class="pvOfflineText">
-                  Sem conexão com a internet no momento. As dicas continuam sendo exibidas e o painel se atualiza automaticamente quando a conexão voltar.
+                  Sem conexão com a internet no momento. O painel continua exibindo conteúdos locais e se atualiza quando a conexão voltar.
                 </p>
                 <p class="pvOfflineHint">verificando conexão…</p>
               </div>
             </div>
           </div>
-
         </section>
       </div>
     </main>
 
-    <!-- progress do ciclo acima do rodapé -->
     <div class="progressWrap" aria-hidden="true">
       <div class="divider"><div id="cycleFill"></div></div>
     </div>
 
-    <!-- logo canto inferior direito -->
     <footer class="pvFooter" aria-label="Rodapé">
       <img class="pvLogo" src="assets/logo-pontoview.png" alt="PontoView" onerror="this.style.display='none'">
     </footer>
@@ -530,160 +590,146 @@
     /***********************
      * CONFIG
      ***********************/
-    const ROTATE_MS = 16000;     // tempo entre dicas
-    const TRANSITION_MS = 520;   // bate com CSS
+    const WORKER_URL = "https://saude.pedrhc258.workers.dev/api/health-tips";
+    const ROTATE_MS = 16000;
+    const TRANSITION_MS = 520;
+    const FETCH_EVERY_MIN = 30;
 
-    // Se quiser automatizar via Worker/endpoint:
-    // Espera algo assim:
-    // {
-    //   "source": "SUA FONTE",
-    //   "items": [
-    //     {"cat":"Sono","title":"...","body":"...","icon":"bedtime","art":"waves"},
-    //     ...
-    //   ]
-    // }
-    // Deixe vazio para rodar 100% local.
-    const REMOTE_TIPS_URL = ""; // ex: "https://seu-worker.seudominio.workers.dev/health"
-
-    /***********************
-     * CONTEÚDO LOCAL (mais “diferenciado”)
-     * - icon: nome do Material Symbols (Outlined)
-     * - art: id de ilustração leve (SVG)
-     ***********************/
-    const LOCAL_TIPS = [
-      { cat:"Hidratação", icon:"water_drop", art:"waves",
-        title:"Hidrate-se ao longo do dia.",
-        body:"Tome pequenos goles com frequência. Água ajuda na disposição, na circulação e no controle da temperatura corporal." },
-
-      { cat:"Respiração", icon:"air", art:"breath",
-        title:"Faça 3 respirações lentas.",
-        body:"Inspire pelo nariz por 4 segundos, segure 2, expire por 6. Isso reduz tensão e melhora o foco." },
-
-      { cat:"Postura", icon:"accessible_forward", art:"posture",
-        title:"Relaxe os ombros e apoie os pés.",
-        body:"Uma postura confortável diminui dores no pescoço e lombar. Ajuste-se e descruze as pernas, se puder." },
-
-      { cat:"Higiene das mãos", icon:"back_hand", art:"bubbles",
-        title:"Higienize as mãos por 20 segundos.",
-        body:"Esfregue palmas, dorso, entre os dedos e polegares. Essa simples ação reduz muito o risco de infecções." },
-
-      { cat:"Sono", icon:"bedtime", art:"moon",
-        title:"Sono é parte do tratamento.",
-        body:"Rotina regular e menos telas antes de dormir ajudam o corpo a recuperar energia e regular hormônios." },
-
-      { cat:"Movimento", icon:"directions_walk", art:"steps",
-        title:"Movimento curto também conta.",
-        body:"Levante, alongue e caminhe 2 minutos. Pequenas pausas melhoram circulação e reduzem rigidez." },
-
-      { cat:"Alimentação", icon:"nutrition", art:"leaf",
-        title:"Monte um prato mais colorido.",
-        body:"Quanto mais cores naturais (verduras, legumes, frutas), maior a variedade de nutrientes e fibras." },
-
-      { cat:"Segurança", icon:"medication", art:"shield",
-        title:"Evite automedicação.",
-        body:"Use medicamentos somente com orientação. Se tiver dúvidas, procure a equipe de saúde." },
-
-      { cat:"Saúde mental", icon:"psychology", art:"spark",
-        title:"Nomeie o que você está sentindo.",
-        body:"Reconhecer emoções reduz ansiedade e melhora decisões. Se precisar, peça ajuda: você não está sozinho." },
-
-      { cat:"Prevenção", icon:"vaccines", art:"dots",
-        title:"Mantenha vacinas e exames em dia.",
-        body:"A prevenção identifica problemas mais cedo e aumenta as chances de um cuidado mais simples e eficaz." },
-    ];
-
-    /***********************
-     * ILUSTRAÇÕES (SVGs leves)
-     ***********************/
-    function artSVG(kind){
-      const common = `viewBox="0 0 600 420" fill="none" xmlns="http://www.w3.org/2000/svg"`;
-      if(kind === "waves"){
-        return `<svg ${common}>
-          <path opacity=".25" d="M0 290c80-40 140-40 220 0s150 40 230 0 150-40 150-40v170H0V290Z" fill="white"/>
-          <path opacity=".22" d="M0 320c90-55 165-55 255 0s165 55 245 0 100-40 100-40v140H0V320Z" fill="white"/>
-          <circle opacity=".18" cx="110" cy="140" r="70" fill="white"/>
-          <circle opacity=".12" cx="470" cy="160" r="90" fill="white"/>
-        </svg>`;
-      }
-      if(kind === "breath"){
-        return `<svg ${common}>
-          <circle opacity=".18" cx="210" cy="210" r="120" fill="white"/>
-          <circle opacity=".10" cx="360" cy="210" r="150" fill="white"/>
-          <path opacity=".24" d="M70 320c80-40 140-40 220 0s160 40 240 0" stroke="white" stroke-width="18" stroke-linecap="round"/>
-          <path opacity=".22" d="M120 360c70-30 120-30 190 0s140 30 210 0" stroke="white" stroke-width="14" stroke-linecap="round"/>
-        </svg>`;
-      }
-      if(kind === "posture"){
-        return `<svg ${common}>
-          <rect opacity=".16" x="90" y="270" width="420" height="40" rx="20" fill="white"/>
-          <rect opacity=".14" x="170" y="110" width="260" height="140" rx="36" fill="white"/>
-          <circle opacity=".18" cx="210" cy="160" r="34" fill="white"/>
-          <path opacity=".22" d="M250 170c20 25 55 40 90 40 40 0 76-18 96-46" stroke="white" stroke-width="14" stroke-linecap="round"/>
-        </svg>`;
-      }
-      if(kind === "bubbles"){
-        return `<svg ${common}>
-          <circle opacity=".18" cx="180" cy="150" r="70" fill="white"/>
-          <circle opacity=".12" cx="260" cy="240" r="110" fill="white"/>
-          <circle opacity=".12" cx="420" cy="170" r="90" fill="white"/>
-          <circle opacity=".10" cx="470" cy="270" r="60" fill="white"/>
-          <path opacity=".22" d="M120 330c90-60 180-60 270 0" stroke="white" stroke-width="16" stroke-linecap="round"/>
-        </svg>`;
-      }
-      if(kind === "moon"){
-        return `<svg ${common}>
-          <circle opacity=".12" cx="420" cy="140" r="110" fill="white"/>
-          <path opacity=".22" d="M445 80c-30 10-50 40-50 74 0 44 36 80 80 80 12 0 24-3 34-8-18 40-58 68-104 68-64 0-116-52-116-116 0-58 42-106 96-116Z" fill="white"/>
-          <circle opacity=".10" cx="180" cy="270" r="90" fill="white"/>
-        </svg>`;
-      }
-      if(kind === "steps"){
-        return `<svg ${common}>
-          <rect opacity=".16" x="120" y="260" width="140" height="60" rx="18" fill="white"/>
-          <rect opacity=".14" x="250" y="210" width="160" height="60" rx="18" fill="white"/>
-          <rect opacity=".12" x="380" y="160" width="140" height="60" rx="18" fill="white"/>
-          <circle opacity=".10" cx="140" cy="150" r="70" fill="white"/>
-        </svg>`;
-      }
-      if(kind === "leaf"){
-        return `<svg ${common}>
-          <path opacity=".20" d="M320 90c90 20 150 100 150 170 0 80-70 130-150 130-100 0-190-80-190-190 0-50 20-90 60-110 20 70 80 120 130 130-10-40-10-90 0-130Z" fill="white"/>
-          <path opacity=".18" d="M220 280c60-40 120-90 190-170" stroke="white" stroke-width="14" stroke-linecap="round"/>
-          <circle opacity=".10" cx="170" cy="150" r="70" fill="white"/>
-        </svg>`;
-      }
-      if(kind === "shield"){
-        return `<svg ${common}>
-          <path opacity=".20" d="M300 70c90 50 160 40 160 40v140c0 110-90 150-160 180-70-30-160-70-160-180V110s70 10 160-40Z" fill="white"/>
-          <path opacity=".18" d="M240 240h120" stroke="white" stroke-width="16" stroke-linecap="round"/>
-          <path opacity=".18" d="M300 180v120" stroke="white" stroke-width="16" stroke-linecap="round"/>
-          <circle opacity=".10" cx="120" cy="150" r="70" fill="white"/>
-        </svg>`;
-      }
-      if(kind === "spark"){
-        return `<svg ${common}>
-          <circle opacity=".14" cx="200" cy="220" r="120" fill="white"/>
-          <circle opacity=".10" cx="430" cy="170" r="90" fill="white"/>
-          <path opacity=".22" d="M300 120l16 54 54 16-54 16-16 54-16-54-54-16 54-16 16-54Z" fill="white"/>
-          <path opacity=".18" d="M420 260l10 34 34 10-34 10-10 34-10-34-34-10 34-10 10-34Z" fill="white"/>
-        </svg>`;
-      }
-      if(kind === "dots"){
-        return `<svg ${common}>
-          <circle opacity=".16" cx="190" cy="160" r="80" fill="white"/>
-          <circle opacity=".10" cx="420" cy="240" r="120" fill="white"/>
-          <g opacity=".22" fill="white">
-            <circle cx="130" cy="310" r="10"/><circle cx="170" cy="330" r="8"/><circle cx="210" cy="300" r="9"/>
-            <circle cx="450" cy="120" r="9"/><circle cx="480" cy="150" r="7"/><circle cx="410" cy="150" r="8"/>
-          </g>
-        </svg>`;
-      }
-      return `<svg ${common}><circle opacity=".14" cx="300" cy="210" r="160" fill="white"/></svg>`;
+    function qrUrl(link){
+      if(!link) return "";
+      return "https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=" + encodeURIComponent(link);
+    }
+    function hostFromLink(link){
+      try{ return new URL(link).hostname.replace(/^www\./,""); } catch { return ""; }
     }
 
     /***********************
-     * HELPERS
+     * IMAGENS (adicione aqui os caminhos reais)
+     * IMPORTANTE: se estiver usando pasta assets, use caminhos relativos corretos:
+     * - "assets/saude/01.webp"  (sem barra inicial)
+     * - ou URL completa https://...
      ***********************/
+    const LOCAL_IMAGES = [
+      // "assets/saude/01.webp",
+      // "assets/saude/02.webp",
+      // "assets/saude/03.webp",
+    ];
+
+    /***********************
+     * CONTEÚDO LOCAL
+     ***********************/
+    const LOCAL_ITEMS = [
+      {
+        category:"Hidratação",
+        icon:"water_drop",
+        text:"Hidrate-se ao longo do dia — pequenos goles com frequência ajudam a manter o hábito.",
+        hint:"Dica prática: deixe uma garrafa à vista e água acessível.",
+        source:"PontoView",
+        sourceDomain:"pontoview",
+        link:"https://www.gov.br/saude/pt-br/assuntos/saude-brasil/eu-quero-me-alimentar-melhor/noticias/2021/nao-consegue-beber-agua-suficiente-confira-5-dicas-para-aumentar-a-sua-hidratacao",
+        image:"" // opcional: "assets/saude/01.webp"
+      },
+      {
+        category:"Bem-estar",
+        icon:"self_improvement",
+        text:"Pausa rápida: respire fundo por 20 segundos, inspire pelo nariz e solte devagar.",
+        hint:"Uma pausa curta já melhora o conforto.",
+        source:"PontoView",
+        sourceDomain:"pontoview",
+        link:"https://www.gov.br/saude/pt-br",
+        image:""
+      },
+      {
+        category:"Movimento",
+        icon:"directions_walk",
+        text:"Se estiver sentado há muito tempo, levante e caminhe um pouco. Movimentos curtos ao longo do dia fazem diferença.",
+        hint:"Alongue ombros e pescoço por 30–60s.",
+        source:"PontoView",
+        sourceDomain:"pontoview",
+        link:"https://www.gov.br/saude/pt-br",
+        image:""
+      },
+      {
+        category:"Higiene",
+        icon:"wash",
+        text:"Higienize as mãos: palmas, dorso, dedos e unhas. É uma das medidas mais eficazes no dia a dia.",
+        hint:"Sempre que possível, use água e sabão.",
+        source:"PontoView",
+        sourceDomain:"pontoview",
+        link:"https://www.gov.br/anvisa/pt-br",
+        image:""
+      },
+      {
+        category:"Telas",
+        icon:"visibility",
+        text:"Pausa de tela: descanse os olhos olhando para um ponto distante por alguns segundos.",
+        hint:"Mudanças simples ajudam no conforto.",
+        source:"PontoView",
+        sourceDomain:"pontoview",
+        link:"https://www.gov.br/saude/pt-br",
+        image:""
+      }
+    ];
+
+    /***********************
+     * ELEMENTOS
+     ***********************/
+    document.getElementById("titleHdr").textContent =
+      document.getElementById("panel").dataset.title || "DICAS DE SAÚDE";
+
+    const stage = document.getElementById("stage");
+    const tipArea = document.getElementById("tipArea");
+    const tipIcon = document.getElementById("tipIcon");
+    const tipCat  = document.getElementById("tipCat");
+    const tipTitle= document.getElementById("tipTitle");
+    const tipBody = document.getElementById("tipBody");
+    const kickerSmall = document.getElementById("kickerSmall");
+
+    const qrBox = document.getElementById("qrBox");
+    const qrImg = document.getElementById("qrImg");
+    const qrHost = document.getElementById("qrHost");
+    const qrHint = document.getElementById("qrHint");
+
+    const miniMedia = document.getElementById("miniMedia");
+    const miniImg = document.getElementById("miniImg");
+
+    const offlineLayer = document.getElementById("offlineLayer");
+
+    const dotA = document.getElementById("dotA");
+    const dotB = document.getElementById("dotB");
+    const cycleFill = document.getElementById("cycleFill");
+
+    /***********************
+     * STATE
+     ***********************/
+    let remoteItems = [];
+    let playlist = [];
+    let idx = 0;
+    let rotStart = performance.now();
+    let imgIdx = 0;
+
+    /***********************
+     * UTIL
+     ***********************/
+    function cleanText(s){
+      return String(s || "").replace(/\s+/g," ").trim();
+    }
+    function safeItem(it){
+      if(!it) return null;
+      const text = cleanText(it.text);
+      if(!text) return null;
+      return {
+        text,
+        source: cleanText(it.source || "Fonte"),
+        sourceDomain: cleanText(it.sourceDomain || hostFromLink(it.link) || ""),
+        link: String(it.link || "").trim(),
+        icon: cleanText(it.icon || "info"),
+        lang: cleanText(it.lang || "pt-BR"),
+        category: cleanText(it.category || "Saúde"),
+        hint: cleanText(it.hint || ""),
+        image: String(it.image || "").trim()
+      };
+    }
     function shuffle(arr){
       const a = arr.slice();
       for(let i=a.length-1;i>0;i--){
@@ -692,150 +738,247 @@
       }
       return a;
     }
-    function safeText(s, max=180){
-      if(!s) return "";
-      const t = String(s).replace(/\s+/g," ").trim();
-      return t.length > max ? t.slice(0,max).replace(/\s+\S*$/,"").trim()+"…" : t;
+    function dedupe(items){
+      const seen = new Set();
+      const out = [];
+      for(const it of items){
+        const key = `${(it.link||"")}|${it.text}`.toLowerCase();
+        if(seen.has(key)) continue;
+        seen.add(key);
+        out.push(it);
+      }
+      return out;
+    }
+    function interleave(a, b){
+      const out = [];
+      const A = a.slice(), B = b.slice();
+      let i=0;
+      while(i < A.length || i < B.length){
+        if(i < A.length) out.push(A[i]);
+        if(i < B.length) out.push(B[i]);
+        i++;
+      }
+      return out;
     }
 
     /***********************
-     * REMOTO (opcional)
+     * AUTO-FIT DO TÍTULO
      ***********************/
-    const sourcePill = document.getElementById("sourcePill");
-    let tips = LOCAL_TIPS.slice();
+    function fitTitle(){
+      const max = Math.round(Math.min(70, window.innerWidth * 0.06));
+      const min = 22;
 
-    async function tryLoadRemote(){
-      if(!REMOTE_TIPS_URL) return false;
-      try{
-        const r = await fetch(REMOTE_TIPS_URL, { cache:"no-store" });
-        if(!r.ok) throw new Error("HTTP "+r.status);
-        const j = await r.json();
-        const items = Array.isArray(j.items) ? j.items : null;
-        if(!items || !items.length) return false;
+      tipTitle.style.fontSize = max + "px";
+      const containerH = tipArea.clientHeight;
+      if(containerH <= 0) return;
 
-        const cleaned = items.map(x => ({
-          cat: safeText(x.cat || "Saúde", 28),
-          icon: safeText(x.icon || "health_and_safety", 40),
-          art: safeText(x.art || "waves", 24),
-          title: safeText(x.title || "Dica de saúde", 120),
-          body: safeText(x.body || "", 220),
-        })).filter(x => x.title && x.body);
+      let lo = min, hi = max, best = min;
 
-        if(!cleaned.length) return false;
+      for(let k=0; k<10; k++){
+        const mid = Math.floor((lo+hi)/2);
+        tipTitle.style.fontSize = mid + "px";
+        tipTitle.offsetHeight;
 
-        tips = cleaned;
-        sourcePill.textContent = (j.source ? safeText(j.source, 22) : "CONTEÚDO ONLINE").toUpperCase();
-        return true;
-      }catch(e){
-        return false;
+        const used = tipArea.scrollHeight;
+        if(used <= containerH){
+          best = mid;
+          lo = mid + 1;
+        }else{
+          hi = mid - 1;
+        }
       }
+      tipTitle.style.fontSize = best + "px";
     }
 
     /***********************
      * UI
      ***********************/
-    document.getElementById("titleHdr").textContent =
-      document.getElementById("panel").dataset.title || "DICAS DE SAÚDE";
-
-    const stage = document.getElementById("stage");
-    const tipIcon = document.getElementById("tipIcon");
-    const tipCat  = document.getElementById("tipCat");
-    const tipTitle= document.getElementById("tipTitle");
-    const tipBody = document.getElementById("tipBody");
-    const artHost = document.getElementById("tipArtInner");
-    const kickerSmall = document.getElementById("kickerSmall");
-
-    const offlineLayer = document.getElementById("offlineLayer");
-
-    const dotA = document.getElementById("dotA");
-    const dotB = document.getElementById("dotB");
-
-    /***********************
-     * PROGRESS
-     ***********************/
-    const cycleFill = document.getElementById("cycleFill");
-    let rotStart = performance.now();
-
-    function animateProgress(now){
-      const p = ((now - rotStart) % ROTATE_MS) / ROTATE_MS;
-      cycleFill.style.width = `${Math.max(2, p*100)}%`;
-      requestAnimationFrame(animateProgress);
-    }
-    requestAnimationFrame(animateProgress);
-
-    /***********************
-     * ROTATION
-     ***********************/
-    let pool = shuffle(tips);
-    let idx = 0;
-
-    function resetPool(){
-      pool = shuffle(tips);
-      idx = 0;
-    }
-
     function flipDots(){
       const aActive = dotA.classList.contains("active");
       dotA.classList.toggle("active", !aActive);
       dotB.classList.toggle("active", aActive);
     }
 
-    function setTip(t){
-      stage.classList.add("pvFadeOut");
-      setTimeout(()=>{
-        tipIcon.textContent = t.icon || "health_and_safety";
-        tipCat.textContent  = (t.cat || "Saúde").toUpperCase();
-        tipTitle.textContent= t.title || "Dica de saúde";
-        tipBody.textContent = t.body || "";
-
-        kickerSmall.textContent =
-          `${(t.cat || "SAÚDE").toUpperCase()} • DICAS RÁPIDAS`;
-
-        artHost.innerHTML = artSVG(t.art || "waves");
-
-        stage.classList.remove("pvFadeOut");
-      }, TRANSITION_MS);
-    }
-
-    function step(){
-      if(!pool.length) return;
-      rotStart = performance.now();
-      flipDots();
-      setTip(pool[idx++ % pool.length]);
-    }
-
-    /***********************
-     * OFFLINE OVERLAY (sem badge)
-     ***********************/
     function setOfflineOverlay(){
       const isOnline = navigator.onLine;
       offlineLayer.style.display = isOnline ? "none" : "flex";
       offlineLayer.setAttribute("aria-hidden", isOnline ? "true" : "false");
     }
 
+    function applyKicker(cat){
+      tipCat.textContent = (cat || "SAÚDE").toUpperCase();
+      kickerSmall.textContent = "BEM-ESTAR • SERVIÇO";
+    }
+
+    function pickFallbackImage(){
+      if(!LOCAL_IMAGES.length) return "";
+      const img = LOCAL_IMAGES[imgIdx++ % LOCAL_IMAGES.length];
+      return img || "";
+    }
+
+    function setMiniImage(imageUrl){
+      const url = String(imageUrl || "").trim();
+      if(!url){
+        miniMedia.style.display = "none";
+        miniImg.removeAttribute("src");
+        miniImg.onerror = null;
+        return;
+      }
+      miniMedia.style.display = "block";
+      miniImg.src = url;
+
+      miniImg.onerror = () => {
+        const fb = pickFallbackImage();
+        if(fb && fb !== url){
+          miniImg.src = fb;
+        }else{
+          miniMedia.style.display = "none";
+          miniImg.removeAttribute("src");
+        }
+        miniImg.onerror = null;
+      };
+    }
+
+    function render(it){
+      const item = safeItem(it) || safeItem(LOCAL_ITEMS[0]);
+      if(!item) return;
+
+      tipIcon.textContent = item.icon || "info";
+      applyKicker(item.category);
+
+      tipTitle.textContent = item.text;
+
+      if(item.hint){
+        tipBody.style.display = "";
+        tipBody.textContent = item.hint;
+      }else{
+        tipBody.style.display = "none";
+        tipBody.textContent = "";
+      }
+
+      // Imagem: usa item.image; senão, carrossel LOCAL_IMAGES
+      const img = item.image || pickFallbackImage();
+      setMiniImage(img);
+
+      // QR
+      if(item.link){
+        const h = hostFromLink(item.link) || item.sourceDomain || "LINK";
+        qrHost.textContent = (h || "LINK").toUpperCase();
+        qrHint.textContent = item.hint ? item.hint : "Aponte a câmera para acessar a fonte.";
+        qrImg.src = qrUrl(item.link);
+        qrBox.classList.remove("is-hidden");
+
+        qrImg.onerror = () => {
+          qrBox.classList.add("is-hidden");
+          qrImg.removeAttribute("src");
+          qrImg.onerror = null;
+        };
+      }else{
+        qrBox.classList.add("is-hidden");
+        qrImg.removeAttribute("src");
+        qrImg.onerror = null;
+      }
+
+      requestAnimationFrame(() => fitTitle());
+    }
+
+    /***********************
+     * ROTATION + PROGRESS
+     ***********************/
+    function animateProgress(now){
+      const p = ((now - rotStart) % ROTATE_MS) / ROTATE_MS;
+      cycleFill.style.width = `${Math.max(2, p*100)}%`;
+      requestAnimationFrame(animateProgress);
+    }
+
+    function step(){
+      if(!playlist.length) return;
+      stage.classList.add("pvFadeOut");
+      setTimeout(()=>{
+        flipDots();
+        render(playlist[idx++ % playlist.length]);
+        stage.classList.remove("pvFadeOut");
+        rotStart = performance.now();
+      }, TRANSITION_MS);
+    }
+
+    /***********************
+     * DATA: worker + local, intercalado
+     ***********************/
+    async function fetchJsonWithTimeout(url, ms=9000){
+      const ctl = new AbortController();
+      const t = setTimeout(()=>ctl.abort(), ms);
+      try{
+        const r = await fetch(url, { cache:"no-store", signal: ctl.signal });
+        if(!r.ok) throw new Error("HTTP " + r.status);
+        return await r.json();
+      } finally {
+        clearTimeout(t);
+      }
+    }
+
+    async function loadRemote(){
+      try{
+        const data = await fetchJsonWithTimeout(WORKER_URL, 9000);
+        const arr = Array.isArray(data.items) ? data.items : [];
+        const cleaned = dedupe(arr.map(safeItem).filter(Boolean))
+          .filter(x => (x.lang || "").toLowerCase().includes("pt"));
+        remoteItems = cleaned.length ? cleaned : [];
+      }catch(e){
+        remoteItems = [];
+      }
+    }
+
+    function rebuildPlaylist(){
+      const local = shuffle(LOCAL_ITEMS.map(safeItem).filter(Boolean));
+      const remote = shuffle(remoteItems.map(safeItem).filter(Boolean));
+
+      playlist = (remote.length && local.length) ? interleave(remote, local) : (remote.length ? remote : local);
+
+      if(!playlist.length){
+        playlist = [safeItem({
+          text:"Hidrate-se ao longo do dia.",
+          source:"PontoView",
+          sourceDomain:"pontoview",
+          link:"https://www.gov.br/saude/pt-br",
+          icon:"water_drop",
+          lang:"pt-BR",
+          category:"Hidratação",
+          hint:"Dica prática: deixe uma garrafa à vista e água acessível."
+        })];
+      }
+
+      idx = Math.floor(Math.random() * playlist.length);
+    }
+
     /***********************
      * START
      ***********************/
+    let resizeT = null;
+    window.addEventListener("resize", ()=>{
+      clearTimeout(resizeT);
+      resizeT = setTimeout(()=>fitTitle(), 120);
+    });
+
     (async ()=>{
-      // online/offline overlay
       setOfflineOverlay();
       window.addEventListener("online", setOfflineOverlay);
       window.addEventListener("offline", setOfflineOverlay);
       setInterval(setOfflineOverlay, 5000);
 
-      // tenta remoto (se configurado); se falhar, fica no local
-      const ok = await tryLoadRemote();
-      if(ok){
-        resetPool();
-      }else{
-        sourcePill.textContent = "CONTEÚDO LOCAL";
-        resetPool();
-      }
+      await loadRemote();
+      rebuildPlaylist();
 
-      // primeiro render
-      setTip(pool[0]);
+      render(playlist[idx++ % playlist.length]);
+
       rotStart = performance.now();
+      requestAnimationFrame(animateProgress);
+
       setInterval(step, ROTATE_MS);
+      setInterval(async ()=>{
+        await loadRemote();
+        rebuildPlaylist();
+      }, 1000 * 60 * FETCH_EVERY_MIN);
     })();
   </script>
 </body>
